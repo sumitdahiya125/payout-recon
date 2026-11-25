@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Reconciliation result</title>
+    <link rel="stylesheet" th:href="@{/app.css}"/>
+</head>
+<body>
+<main class="page">
+    <header class="masthead">
+        <p class="eyebrow" th:text="${run.runId()}">RUN-1</p>
+        <h1>Reconciliation result</h1>
+        <p class="lede">
+            <span th:text="${run.payoutFileName()}">payout_register.xlsx</span>
+            reconciled against
+            <span th:text="${run.bankFileName()}">bank_statement.xlsx</span>.
+        </p>
+    </header>
+
+    <div class="card" th:classappend="${summary.tieOutOk()} ? 'ok' : 'bad'">
+        <div class="tieout">
+            <div>
+                <span class="label">Tie-out</span>
+                <strong th:text="${summary.tieOutOk()} ? 'Passed' : 'Failed'">Passed</strong>
+            </div>
+            <div>
+                <span class="label">Payout difference</span>
+                <strong th:text="${summary.payoutResidual().display()}">0.00</strong>
+            </div>
+            <div>
+                <span class="label">Bank difference</span>
+                <strong th:text="${summary.bankResidual().display()}">0.00</strong>
+            </div>
+            <div>
+                <span class="label">Auto-matched</span>
+                <strong th:text="${summary.matchedCount()} + ' / ' + ${summary.payoutCount()}">0 / 0</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <span class="label">Matched</span>
+            <strong th:text="${summary.matchedCount()}">0</strong>
+            <span class="amount" th:text="${summary.matchedTotal().display()}">0.00</span>
+        </div>
+        <div class="stat amber">
+            <span class="label">Needs review</span>
+            <strong th:text="${summary.reviewCount()}">0</strong>
+            <span class="amount" th:text="${summary.reviewTotal().display()}">0.00</span>
+        </div>
+        <div class="stat red">
+            <span class="label">Unmatched payouts</span>
+            <strong th:text="${summary.unmatchedPayoutCount()}">0</strong>
+            <span class="amount" th:text="${summary.unmatchedPayoutTotal().display()}">0.00</span>
+        </div>
+        <div class="stat grey">
+            <span class="label">Unmatched debits</span>
+            <strong th:text="${summary.unmatchedDebitCount()}">0</strong>
+            <span class="amount" th:text="${summary.unmatchedDebitTotal().display()}">0.00</span>
+        </div>
+    </div>
+
+    <section class="card">
+        <h2>Payouts</h2>
+        <table>
+            <thead>
+            <tr><th>Category</th><th class="num">Count</th><th class="num">Amount</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="total : ${summary.payoutTotals()}">
+                <td th:text="${total.category().label()}">Matched</td>
+                <td class="num" th:text="${total.count()}">0</td>
+                <td class="num" th:text="${total.amount().display()}">0.00</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>Total in register</th>
+                <th class="num" th:text="${summary.payoutCount()}">0</th>
+                <th class="num" th:text="${summary.registerTotal().display()}">0.00</th>
+            </tr>
+            </tfoot>
+        </table>
+        <p class="hint" th:if="${summary.excludedPayoutCount() > 0}">
+            <span th:text="${summary.excludedPayoutCount()}">0</span> payout(s) totalling
+            <span th:text="${summary.excludedPayoutTotal().display()}">0.00</span>
+            were excluded because their status is failed or cancelled.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>Bank statement</h2>
+        <table>
+            <thead>
+            <tr><th>Disposition</th><th class="num">Lines</th><th class="num">Amount</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="total : ${summary.bankTotals()}">
+                <td th:text="${total.category().label()}">Matched</td>
+                <td class="num" th:text="${total.count()}">0</td>
+                <td class="num" th:text="${total.amount().display()}">0.00</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>Net movement in statement</th>
+                <th class="num" th:text="${summary.bankLineCount()}">0</th>
+                <th class="num" th:text="${summary.bankNetTotal().display()}">0.00</th>
+            </tr>
+            </tfoot>
+        </table>
+    </section>
+
+    <section class="card" th:if="${!summary.reviewReasons().isEmpty()}">
+        <h2>Why payouts need review</h2>
+        <table>
+            <thead>
+            <tr><th>Reason</th><th class="num">Payouts</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="entry : ${summary.reviewReasons()}">
+                <td th:text="${entry.key}">Amount differs</td>
+                <td class="num" th:text="${entry.value}">0</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="card quiet">
+        <h2>Data quality</h2>
+        <p>
+            <span th:text="${summary.issueCount()}">0</span> observations:
+            <span th:text="${summary.errorCount()}">0</span> errors,
+            <span th:text="${summary.warningCount()}">0</span> warnings.
+            Every one is listed in the workbook with its source row.
+        </p>
+        <p class="hint" th:text="${run.matchingPolicy()}">Policy</p>
+    </section>
+
+    <div class="actions">
+        <a class="primary" th:href="@{'/runs/' + ${run.runId()} + '/report.xlsx'}">Download Excel report</a>
+        <a class="secondary" th:href="@{/}">Reconcile another pair</a>
+    </div>
+</main>
+</body>
+</html>

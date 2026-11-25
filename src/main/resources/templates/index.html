@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Payout reconciliation</title>
+    <link rel="stylesheet" th:href="@{/app.css}"/>
+</head>
+<body>
+<main class="page">
+    <header class="masthead">
+        <p class="eyebrow">Chronon finance tooling</p>
+        <h1>Payout reconciliation</h1>
+        <p class="lede">
+            Upload the weekly payout register and the bank statement. Every payout is matched or
+            explained, and the workbook ties back to the totals of both files.
+        </p>
+    </header>
+
+    <div class="flash" th:if="${message}" th:text="${message}"></div>
+
+    <form class="card" method="post" th:action="@{/reconcile}" enctype="multipart/form-data">
+        <div class="grid two">
+            <label class="field">
+                <span class="label">Payout register</span>
+                <input type="file" name="payoutFile" accept=".xlsx,.xls" required/>
+                <span class="hint">Chronon export: payout_register.xlsx</span>
+            </label>
+
+            <label class="field">
+                <span class="label">Bank statement</span>
+                <input type="file" name="bankFile" accept=".xlsx,.xls" required/>
+                <span class="hint">Bank export: bank_statement.xlsx (auto-detected)</span>
+            </label>
+        </div>
+
+        <button type="submit" class="primary">Reconcile files</button>
+    </form>
+
+    <section class="card quiet">
+        <h2>What the report contains</h2>
+        <ul class="checks">
+            <li><strong>Summary &amp; Tie-Out</strong>: High-level dashboard showing tie-out status (`PASSED`/`FAILED`), category totals, and auto-detected column mappings.</li>
+            <li><strong>Payout Reconciliation</strong>: Unified ledger of all payouts with category styling and Excel AutoFilter.</li>
+            <li><strong>Bank Statement Activity</strong>: Audit ledger of non-payout and review bank lines with AutoFilter.</li>
+            <li><strong>Data Quality Log</strong>: Complete audit trail of skipped, coerced, or suspicious cells.</li>
+        </ul>
+    </section>
+</main>
+</body>
+</html>

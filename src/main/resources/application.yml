@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: payout-recon
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+recon:
+  matching:
+    date-window-days-before: 1
+    date-window-days-after: 3
+    fee-tolerance-amount: 25.00
+    fee-tolerance-percent: 0.50
+    allow-split-payments: true
+    max-split-parts: 3
+  report:
+    max-runs-retained: 10
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    com.chronon.recon: INFO
+    org.apache.poi: WARN

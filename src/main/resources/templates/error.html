@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Reconciliation could not run</title>
+    <link rel="stylesheet" th:href="@{/app.css}"/>
+</head>
+<body>
+<main class="page">
+    <header class="masthead">
+        <p class="eyebrow">Reconciliation</p>
+        <h1>That did not work</h1>
+    </header>
+
+    <section class="card bad">
+        <p class="message" th:text="${message}">Something went wrong.</p>
+        <p class="hint" th:text="${hint}">Check the files and try again.</p>
+    </section>
+
+    <div class="actions">
+        <a class="primary" th:href="@{/}">Back to upload</a>
+    </div>
+</main>
+</body>
+</html>
