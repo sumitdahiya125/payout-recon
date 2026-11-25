@@ -1,0 +1,44 @@
+id: chronon-payout-register
+description: Chronon payout register export (payout_register.xlsx)
+target: PAYOUT_REGISTER
+default: true
+headerScanRows: 15
+sheetNameContains: payout
+
+fields:
+  payoutId:
+    aliases: ["Payout ID", "PayoutID", "Payout Ref", "Payout Reference", "Payment ID", "Payout No", "Reference ID"]
+    required: true
+    type: STRING
+  employeeId:
+    aliases: ["Employee ID", "Emp ID", "Employee Code", "Emp Code"]
+    type: STRING
+  employeeName:
+    aliases: ["Employee Name", "Beneficiary Name", "Payee Name", "Name"]
+    type: STRING
+  bankAccount:
+    aliases: ["Bank Account (masked)", "Bank Account", "Account Number", "Account No", "Bank A/C", "Beneficiary Account", "Masked Account"]
+    type: ACCOUNT
+  ifsc:
+    aliases: ["IFSC", "IFSC Code", "Bank IFSC"]
+    type: STRING
+  amount:
+    aliases: ["Amount", "Payout Amount", "Net Amount", "Reimbursement Amount", "Paid Amount"]
+    required: true
+    type: MONEY
+  payoutDate:
+    aliases: ["Payout Date", "Payment Date", "Paid On", "Transfer Date", "Initiated On"]
+    required: true
+    type: DATE
+  claimIds:
+    aliases: ["Claim IDs", "Claim ID", "Claims", "Expense IDs", "Claim Nos"]
+    type: ID_LIST
+  status:
+    aliases: ["Status", "Payout Status", "Payment Status"]
+    type: STATUS
+
+skipRowPatterns:
+  - "^total"
+  - "^grand total"
+  - "^subtotal"
+  - "^summary"

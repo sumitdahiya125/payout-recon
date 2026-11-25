@@ -1,0 +1,37 @@
+id: bank-single-amount-statement
+description: Bank statement with one Amount column plus a Dr/Cr indicator (ICICI-style)
+target: BANK_STATEMENT
+headerScanRows: 30
+
+fields:
+  txnDate:
+    aliases: ["Transaction Date", "Txn Date", "Date"]
+    required: true
+    type: DATE
+  valueDate:
+    aliases: ["Value Date", "Value Dt"]
+    type: DATE
+  narration:
+    aliases: ["Transaction Remarks", "Remarks", "Narration", "Description"]
+    required: true
+    type: STRING
+  chequeRef:
+    aliases: ["Cheque No.", "Cheque No", "Ref No.", "Reference No."]
+    type: REFERENCE
+  amount:
+    aliases: ["Amount (INR)", "Transaction Amount", "Amount"]
+    required: true
+    type: MONEY
+  drCr:
+    aliases: ["Dr / Cr", "Dr/Cr", "Debit/Credit", "Type"]
+    required: true
+    type: DRCR
+  balance:
+    aliases: ["Balance (INR)", "Balance", "Available Balance"]
+    type: MONEY
+
+skipRowPatterns:
+  - "^opening balance"
+  - "^closing balance"
+  - "^total"
+  - "^statement summary"

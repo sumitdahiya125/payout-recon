@@ -1,0 +1,58 @@
+id: bank-generic-statement
+description: Generic Indian bank statement with separate debit and credit columns
+target: BANK_STATEMENT
+default: true
+headerScanRows: 30
+
+fields:
+  txnDate:
+    aliases: ["Txn Date", "Transaction Date", "Txn Dt", "Post Date", "Date"]
+    required: true
+    type: DATE
+  valueDate:
+    aliases: ["Value Date", "Value Dt", "Val Date", "Value"]
+    type: DATE
+  narration:
+    aliases: ["Narration", "Description", "Particulars", "Transaction Details", "Remarks", "Transaction Description"]
+    required: true
+    type: STRING
+  chequeRef:
+    aliases: ["Cheque/Ref No", "Cheque No", "Ref No", "Chq/Ref No", "Cheque Ref", "Reference", "Chq No"]
+    type: REFERENCE
+  debit:
+    aliases: ["Debit", "Withdrawal", "Withdrawal Amt", "Withdrawal Amount", "Dr", "Debit Amount", "Paid Out"]
+    type: MONEY
+  credit:
+    aliases: ["Credit", "Deposit", "Deposit Amt", "Deposit Amount", "Cr", "Credit Amount", "Paid In"]
+    type: MONEY
+  balance:
+    aliases: ["Balance", "Closing Balance", "Running Balance", "Bal"]
+    type: MONEY
+
+skipRowPatterns:
+  - "^opening balance"
+  - "^closing balance"
+  - "^total"
+  - "^grand total"
+  - "^statement summary"
+  - "^summary"
+
+nonPayoutKeywords:
+  - salary
+  - interest
+  - charges
+  - gst
+  - tds
+  - atm
+  - cash withdrawal
+  - refund
+  - cashback
+  - dividend
+  - rent
+  - vendor
+  - sweep
+  - fixed deposit
+  - emi
+  - insurance
+  - tax
+  - commission

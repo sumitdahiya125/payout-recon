@@ -1,0 +1,35 @@
+id: bank-hdfc-statement
+description: HDFC-style statement - "Withdrawal Amt." / "Deposit Amt." / "Chq./Ref.No." headers
+target: BANK_STATEMENT
+headerScanRows: 30
+
+fields:
+  txnDate:
+    aliases: ["Date", "Txn Date"]
+    required: true
+    type: DATE
+  valueDate:
+    aliases: ["Value Dt", "Value Date"]
+    type: DATE
+  narration:
+    aliases: ["Narration", "Particulars"]
+    required: true
+    type: STRING
+  chequeRef:
+    aliases: ["Chq./Ref.No.", "Chq/Ref No", "Cheque No.", "Ref No."]
+    type: REFERENCE
+  debit:
+    aliases: ["Withdrawal Amt.", "Withdrawal Amt", "Withdrawal Amount"]
+    type: MONEY
+  credit:
+    aliases: ["Deposit Amt.", "Deposit Amt", "Deposit Amount"]
+    type: MONEY
+  balance:
+    aliases: ["Closing Balance", "Balance"]
+    type: MONEY
+
+skipRowPatterns:
+  - "^opening balance"
+  - "^closing balance"
+  - "^total"
+  - "^statement summary"
